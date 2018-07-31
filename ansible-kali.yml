@@ -1,0 +1,85 @@
+- hosts: 127.0.0.1
+  remote_user: root
+  environment:
+   GOPATH: /root/go
+  tasks:
+  - name: apt update and upgrade
+    apt:
+      upgrade: dist
+      update_cache: yes
+  - name: apt install packages
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - gnome-screenshot
+      - eyewitness
+      - cpanminus
+      - python-pip
+      - golang
+      - libpcap-dev
+      - libnetfilter-queue-dev
+      - python3-pip
+  - name: git clone Impacket
+    git:
+      repo: https://github.com/CoreSecurity/impacket.git
+      dest: /root/git/impacket
+  - name: pip install Impacket
+    pip:
+      requirements: /root/git/impacket/requirements.txt
+  - name: git clone BHG
+    git:
+      repo: https://github.com/NinjaStyle82/bhg.git
+      dest: /root/git/bhg
+  - name: git clone CME
+    git:
+      repo: https://github.com/byt3bl33d3r/CrackMapExec
+      dest: /root/git/cme
+  - name: pip install CME
+    pip:
+      requirements: /root/git/cme/requirements.txt
+  - name: Install rdp-sec-check dependencies
+    cpanm:
+      name: Encoding::BER
+  - name: git clone rdp-sec-check
+    git:
+      repo: https://github.com/portcullislabs/rdp-sec-check.git
+      dest: /root/git/rdp-sec-check
+  - name: git clone mitm6
+    git:
+      repo:  https://github.com/fox-it/mitm6.git
+      dest: /root/git/mitm6
+  - name: pip install mitm6
+    pip:
+      requirements: /root/git/mitm6/requirements.txt
+  - name: go get Bettercap
+    command: go get github.com/bettercap/bettercap
+  - name: git clone PowerUpSQL
+    git:
+      repo:  https://github.com/NetSPI/PowerUpSQL.git
+      dest: /root/git/PowerUpSQL
+  - name: git clone pupy
+    git:
+      repo: https://github.com/n1nj4sec/pupy.git 
+      dest: /root/git/pupy
+  - name: pip install pupy
+    pip:
+      requirements: /root/git/pupy/pupy/requirements.txt
+  - name: git clone seth
+    git:
+      repo: https://github.com/SySS-Research/Seth.git
+      dest: /root/git/seth
+  - name: pip install seth
+    pip:
+      executable: pip3
+      requirements: /root/git/seth/requirements.txt
+  - name: download Sysinternals
+    command: wget -r -nc http://live.sysinternals.com/ -P /root/git/
+    ignore_errors: yes
+    args:
+      no_log: true
+      warn: false
+  - name: git clone Eaphammer
+    git:
+      repo: https://github.com/s0lst1c3/eaphammer.git
+      dest: /root/git/eaphammer
